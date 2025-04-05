@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca no YouTube</title>
+</head>
+<body>
+    <h1>Buscar no YouTube</h1>
+    <h2>Os últimos serão os primeiros!</h2>
+    <form id="formBusca">
+        <input type="text" id="termoBusca" placeholder="Digite o termo de busca">
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div id="resultados"></div>
+
+    <h3>Mais buscados</h3>
+    <ul id="maisBuscados">
+      <li>Exercícios para coluna</li>
+      <li>Podcast inteligência Ltda</li>
+      <li>Café com Inovação</li>
+      <li>..</li>
+      <li>Onde eu Clico</li>
+      <li>Canal de Testes</li>
+      <li>Preguiça Artificial</li>
+      <li>Sancler Miranda</li>
+      <li>IA Produtividade</li>
+      <li>Rob Boliver</li>
+      <li>Me Ensina</li>
+      <li>..</li>
+      <li>Oeste Sem Filtro</li>
+      <li>Didi Red Pill</li>
+      <li>O Jacaré de Tanga</li>
+      <li>Mundial Telenoticias</li>
+      <li>Crente News</li>
+      <li>Mundo Polarizado</li>
+      <li>Josué Aragão</li>
+      <li>..</li>
+      <li>Economista Sincero</li>
+      <li>Investidor 10</li>
+      <li>Investidor Sardinha</li>
+    </ul>
+    <!-- Edite os itens acima conforme desejar -->
+
+    <script>
+        document.getElementById('formBusca').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const termo = document.getElementById('termoBusca').value;
+            const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(termo)}&sp=CAI%3D`;
+            window.location.href = url;
+        });
+
+        document.querySelectorAll('#maisBuscados li').forEach(function(item) {
+            item.style.cursor = 'pointer';
+            item.addEventListener('click', function() {
+                const termo = item.textContent;
+                document.getElementById('termoBusca').value = termo;
+                document.getElementById('formBusca').dispatchEvent(new Event('submit'));
+            });
+        });
+    </script>
+</body>
+</html>
+
