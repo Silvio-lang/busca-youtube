@@ -4,62 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Busca no YouTube</title>
+    <style>
+        ul { list-style-type: none; padding: 0; }
+        li { cursor: pointer; padding: 4px; border-bottom: 1px solid #ddd; }
+        li:hover { background-color: #f0f0f0; }
+        button { margin: 5px 2px; }
+    </style>
 </head>
 <body>
     <h1>Buscar no YouTube</h1>
     <h2>Os últimos serão os primeiros!</h2>
+
     <form id="formBusca">
         <input type="text" id="termoBusca" placeholder="Digite o termo de busca">
         <button type="submit">Buscar</button>
+        <button type="button" id="remover">Remover</button>
+        <button type="button" id="incluir">Incluir</button>
     </form>
 
-    <div id="resultados"></div>
-
     <h3>Mais buscados</h3>
-    <ul id="maisBuscados">
-      <li>Exercícios para coluna</li>
-      <li>Podcast inteligência Ltda</li>
-      <li>Café com Inovação</li>
-      <li>..</li>
-      <li>Onde eu Clico</li>
-      <li>Canal de Testes</li>
-      <li>Preguiça Artificial</li>
-      <li>Sancler Miranda</li>
-      <li>IA Produtividade</li>
-      <li>Rob Boliver</li>
-      <li>Me Ensina</li>
-      <li>..</li>
-      <li>Oeste Sem Filtro</li>
-      <li>Didi Red Pill</li>
-      <li>O Jacaré de Tanga</li>
-      <li>Mundial Telenoticias</li>
-      <li>Crente News</li>
-      <li>Mundo Polarizado</li>
-      <li>Josué Aragão</li>
-      <li>..</li>
-      <li>Economista Sincero</li>
-      <li>Investidor 10</li>
-      <li>Investidor Sardinha</li>
-    </ul>
-    <!-- Edite os itens acima conforme desejar -->
+    <ul id="maisBuscados"></ul>
 
     <script>
+        let canais = JSON.parse(localStorage.getItem('canais')) || [
+            "Podcast inteligência Ltda",
+            "Café com Inovação",
+            "Onde eu Clico",
+            "Canal de Testes",
+            "Preguiça Artificial",
+            "Sancler Miranda",
+            "IA Produtividade",
+            "Rob Boliver",
+            "Me Ensina",
+            "Oeste Sem Filtro",
+            "Didi Red Pill",
+            "O Jacaré de Tanga",
+            "Mundial Telenoticias",
+            "Crente News",
+            "Mundo Polarizado",
+            "Josué Aragão",
+            "Economista Sincero",
+            "Investidor 10",
+            "Investidor Sardinha"
+        ];
+
+        const lista = document.getElementById('maisBuscados');
+        const entrada = document.getElementById('termoBusca');
+
+        function salvarLista() {
+            localStorage.setItem('canais', JSON.stringify(canais));
+        }
+
+        function atualizarLista() {
+            lista.innerHTML = '';
+            canais.forEach(canal => {
+                const li = document.createElement('li');
+                li.textContent = canal;
+                li.addEventListener('click', () => {
+                    entrada.value = canal;
+                });
+                lista.appendChild(li);
+            });
+        }
+
         document.getElementById('formBusca').addEventListener('submit', function(e) {
             e.preventDefault();
-            const termo = document.getElementById('termoBusca').value;
-            const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(termo)}&sp=CAI%3D`;
-            window.location.href = url;
+            const termo = entrada.value.trim();
+            if (termo) {
+                const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(termo)}&sp=CAI%3D`;
+                window.location.href = url;
+            }
         });
 
-        document.querySelectorAll('#maisBuscados li').forEach(function(item) {
-            item.style.cursor = 'pointer';
-            item.addEventListener('click', function() {
-                const termo = item.textContent;
-                document.getElementById('termoBusca').value = termo;
-                document.getElementById('formBusca').dispatchEvent(new Event('submit'));
-            });
+        document.getElementById('remover').addEventListener('click', function() {
+            const termo = entrada.value.trim();
+            canais = canais.filter(c => c.toLowerCase() !== termo.toLowerCase());
+            salvarLista();
+            atualizarLista();
+            entrada.value = '';
         });
+
+        document.getElementById('incluir').addEventListener('click', function() {
+            const termo = entrada.value.trim();
+            if (termo && !canais.some(c => c.toLowerCase() === termo.toLowerCase())) {
+                canais.push(termo);
+                salvarLista();
+                atualizarLista();
+                entrada.value = '';
+            }
+        });
+
+        atualizarLista();
     </script>
 </body>
 </html>
-
