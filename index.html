@@ -20,6 +20,7 @@
         <button type="submit">Buscar</button>
         <button type="button" id="remover">Remover</button>
         <button type="button" id="incluir">Incluir</button>
+        <button type="button" id="ordenar">Ordenar A–Z</button>
     </form>
 
     <h3>Mais buscados</h3>
@@ -27,6 +28,7 @@
 
     <script>
         let canais = JSON.parse(localStorage.getItem('canais')) || [
+            "Exercícios para coluna",
             "Podcast inteligência Ltda",
             "Café com Inovação",
             "Onde eu Clico",
@@ -36,6 +38,7 @@
             "IA Produtividade",
             "Rob Boliver",
             "Me Ensina",
+            "Oi Luiz",
             "Oeste Sem Filtro",
             "Didi Red Pill",
             "O Jacaré de Tanga",
@@ -92,6 +95,12 @@
                 atualizarLista();
                 entrada.value = '';
             }
+        });
+
+        document.getElementById('ordenar').addEventListener('click', function () {
+            canais.sort((a, b) => a.localeCompare(b));
+            salvarLista();
+            atualizarLista();
         });
 
         atualizarLista();
